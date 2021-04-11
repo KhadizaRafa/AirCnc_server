@@ -21,25 +21,13 @@ client.connect(err => {
   const apartmentCollection = client.db(process.env.DB_NAME).collection("apartments");
   // perform actions on the collection object
 
+
   app.post('/addUserTravelInfo', (req, res) => {
-    const file = req.files.file
-    const carName = req.body.carName
-    const _id = req.body.id
-    const description = req.body.description
-    const price = req.body.price
-    const brandName = req.body.brandName
-    const newImg = file.data;
-    const encImg = newImg.toString('base64');
-
-    var image = {
-      contentType: req.files.file.mimetype,
-      size: req.files.file.size,
-      img: Buffer.from(encImg, 'base64')
-    };
-
-    carCollection.insertOne({ _id, carName, price, brandName, description, image, rating: 5 })
-      .then(result => res.send(result.insertedCount > 0))
-  })
+        travelCollection.insertOne(req.body)
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+    });
 
   app.get('/allApartments', (req, res) => {
     apartmentCollection.find()
